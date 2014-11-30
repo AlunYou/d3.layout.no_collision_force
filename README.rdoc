@@ -15,8 +15,8 @@ This js provides a feature to avoid collision while force-directed layout.
 
         var force = d3.layout.force()
 
-    with
-    
+   with
+
         function redraw(layout_for){
                 if(layout_for === "rect"){
                     svg.selectAll(element_type)
