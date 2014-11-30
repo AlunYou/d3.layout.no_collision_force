@@ -1,0 +1,57 @@
+= d3.layout.no_collision_force
+
+version: 0.0.1
+
+
+== Introduction:
+
+This is a plugin for d3.layout.force, which is a network layout implemented by force-directed algorithm.
+This js provides a feature to avoid collision while force-directed layout.
+
+== How to use:
+
+1. has dependency on a quadtree.js which is hosted at https://github.com/mikechambers/ExamplesByMesh/tree/master/JavaScript/QuadTree
+2. replace
+        var force = d3.layout.force()
+    with
+        function redraw(layout_for){
+                if(layout_for === "rect"){
+                    svg.selectAll(element_type)
+                            .attr("x", function(d) { return d.x; })
+                            .attr("y", function(d) { return d.y; });
+                }
+                else{
+                    svg.selectAll(element_type)
+                            .attr("cx", function(d) { return d.x; })
+                            .attr("cy", function(d) { return d.y; });
+                }
+            };
+        var force = d3.layout.no_collision_force({
+                    layout_for:"rect",
+                    maxDepth:5,
+                    maxChildren:5,
+                    redrawCallback:redraw
+                })
+    layout_for: "rect" or "circle". when in collision, rect will move horizontally/vertically, circle will move radially to avoid.
+    maxDepth: param for quadtree
+    maxChildren: param for quadtree
+    redrawCallback: it's called after avoid-collision movement of each tick, to draw updated positions
+
+
+== Inspired by this work:
+    http://bl.ocks.org/mbostock/1748247. Thanks!
+    However, its implementation is not quite right, because it tries to detect collision using the d3 quadtree which doesn't support
+    dimensioned shape (only support points without dimension).
+
+
+== License:
+
+(The MIT License)
+
+Copyright © 2014 AlunYou
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.

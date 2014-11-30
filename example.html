@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="d3.js"></script>
+    <script type="text/javascript" src="sized_quadtree.js"></script>
+    <script type="text/javascript" src="d3.layout.no_collision_force.js"></script>
+    <style type="text/css">
+        body {
+            overflow: auto;
+            margin: 0;
+            font-size: 14px;
+            font-family: "Helvetica Neue", Helvetica;
+        }
+
+        rect {
+            fill: none;
+            pointer-events: all;
+            stroke: #000;
+            stroke-opacity: .5;
+        }
+
+        line {
+            stroke: #000;
+            stroke-width: 1.5px;
+        }
+
+        svg {
+            border:1px solid black;
+        }
+    </style>
+</head>
+<body>
+<div id="body">
+    <div id="footer">
+        Avoid Collision While Force Layout
+        <div class="hint">move the mouse to repel nodes</div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var w = 1024, h = 600;
+    var svg = d3.select("#body").append("svg:svg")
+            .attr("width", w)
+            .attr("height", h);
+
+    var nodes = d3.range(10).map(function() {
+                var w1 = (Math.random()+0.3) * 250 + 20;
+                var h1 = (Math.random()+0.3) * 250 + 20;
+                return {
+                radius: w1/2,
+                width:  w1,
+                height: h1
+                };
+            }),
+        color = d3.scale.category10();
+
+    var show_circle = false;
+    var element_type = show_circle ? "circle" : "rect";
+
+    var force = d3.layout.no_collision_force({
+                layout_for:element_type,
+                maxDepth:5,
+                maxChildren:5,
+                redrawCallback:redraw
+            })
+            .gravity(0.1)
+            .charge(function(d, i) { return i ? 0 : -2000; })
+            .nodes(nodes)
+            .size([w, h]);
+
+    var root = nodes[0];
+    root.radius = 0;
+    root.width = 0;
+    root.height = 0;
+    root.fixed = true;
+
+    svg.selectAll("rect")
+            .data(nodes.slice(1))
+            .enter().append("svg:" + element_type)
+            .attr("class", "node")
+            .attr("width", function(d) { return d.width; } )
+            .attr("height", function(d) { return d.height; })
+            .style("fill", function(d, i) { return color(i % 3);; })
+            .attr("r", function(d) { return d.radius; })
+            .call(force.drag);
+
+    force.start();
+    //uncomment this for static layout
+    /*for (var i = 0; i < 100; ++i) {
+        force.tick();
+    }
+    force.stop();*/
+
+    svg.on("mousemove", function() {
+        var p1 = d3.svg.mouse(this);
+        //root.px = p1[0];
+        //root.py = p1[1];
+        //force.resume();
+    });
+
+    function redraw(layout_for){
+        if(layout_for === "rect"){
+            svg.selectAll(element_type)
+                    .attr("x", function(d) { return d.x; })
+                    .attr("y", function(d) { return d.y; });
+        }
+        else{
+            svg.selectAll(element_type)
+                    .attr("cx", function(d) { return d.x; })
+                    .attr("cy", function(d) { return d.y; });
+        }
+    };
+
+</script>
+</body>
+</html>
