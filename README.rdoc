@@ -13,7 +13,7 @@ This js provides a feature to avoid collision while force-directed layout.
 1. has dependency on a quadtree.js which is hosted at https://github.com/mikechambers/ExamplesByMesh/tree/master/JavaScript/QuadTree
 2. replace
         var force = d3.layout.force()
-    with
+with
         function redraw(layout_for){
                 if(layout_for === "rect"){
                     svg.selectAll(element_type)
@@ -32,16 +32,16 @@ This js provides a feature to avoid collision while force-directed layout.
                     maxChildren:5,
                     redrawCallback:redraw
                 })
-    layout_for: "rect" or "circle". when in collision, rect will move horizontally/vertically, circle will move radially to avoid.
-    maxDepth: param for quadtree
-    maxChildren: param for quadtree
-    redrawCallback: it's called after avoid-collision movement of each tick, to draw updated positions
+layout_for: "rect" or "circle". when in collision, rect will move horizontally/vertically, circle will move radially to avoid.
+maxDepth: param for quadtree
+maxChildren: param for quadtree
+redrawCallback: it's called after avoid-collision movement of each tick, to draw updated positions
 
 
 == Inspired by this work:
-    http://bl.ocks.org/mbostock/1748247. Thanks!
-    However, its implementation is not quite right, because it tries to detect collision using the d3 quadtree which doesn't support
-    dimensioned shape (only support points without dimension).
+http://bl.ocks.org/mbostock/1748247. Thanks!
+However, its implementation is not quite right, because it tries to detect collision using the d3 quadtree which doesn't support
+dimensioned shape (only support points without dimension).
 
 
 == License:
