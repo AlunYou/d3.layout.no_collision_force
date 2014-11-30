@@ -12,8 +12,11 @@ This js provides a feature to avoid collision while force-directed layout.
 
 1. has dependency on a quadtree.js which is hosted at https://github.com/mikechambers/ExamplesByMesh/tree/master/JavaScript/QuadTree
 2. replace
+
         var force = d3.layout.force()
+
     with
+    
         function redraw(layout_for){
                 if(layout_for === "rect"){
                     svg.selectAll(element_type)
