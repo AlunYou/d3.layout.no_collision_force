@@ -32,14 +32,19 @@ with
                     maxChildren:5,
                     redrawCallback:redraw
                 })
+
 layout_for: "rect" or "circle". when in collision, rect will move horizontally/vertically, circle will move radially to avoid.
+
 maxDepth: param for quadtree
+
 maxChildren: param for quadtree
+
 redrawCallback: it's called after avoid-collision movement of each tick, to draw updated positions
 
 
 == Inspired by this work:
 http://bl.ocks.org/mbostock/1748247. Thanks!
+
 However, its implementation is not quite right, because it tries to detect collision using the d3 quadtree which doesn't support
 dimensioned shape (only support points without dimension).
 
